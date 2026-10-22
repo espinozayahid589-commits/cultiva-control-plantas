@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cultiva | Control de plantas</title>
+
+<style>
+:root {
+  --verde: #176b45;
+  --verde2: #218653;
+  --fondo: #f2f6f2;
+  --borde: #dce7dd;
+  --texto: #20392c;
+  --gris: #6c7c71;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+header {
+  background: linear-gradient(120deg, #105737, #218653);
+  color: white;
+  padding: 22px;
+}
+
+.cabecera {
+  max-width: 1150px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.logo { font-size: 35px; }
+
+h1, h2, h3, p { margin-top: 0; }
+
+header h1 { margin-bottom: 4px; }
+
+header p {
+  margin-bottom: 0;
+  color: #d6efdf;
+}
+
+button, input, select, textarea { font: inherit; }
+
+button {
+  border: none;
+  border-radius: 9px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover { opacity: .88; }
+
+.btn {
+  background: var(--verde);
+  color: white;
+}
+
+.btn-claro {
+  background: white;
+  color: var(--verde);
+}
+
+.btn-borde {
+  background: white;
+  color: var(--verde);
+  border: 1px solid var(--borde);
+}
+
+.btn-rojo {
+  background: #ffeded;
+  color: #a32929;
+}
+
+.contenedor {
+  max-width: 1150px;
+  padding: 22px;
+  margin: auto;
+}
+
+.navegacion {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.nav {
+  background: white;
+  border: 1px solid var(--borde);
+  color: var(--texto);
+}
+
+.nav.activo {
+  background: var(--verde);
+  color: white;
+}
+
+.estadisticas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.stat, .panel, .tarjeta {
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+}
+
+.stat { padding: 18px; }
+
+.stat span {
+  display: block;
+  color: var(--gris);
+  font-size: 13px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 28px;
+  margin-top: 10px;
+}
+
+.panel {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.panel-titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.panel-titulo h2 { font-size: 21px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.tarjeta { overflow: hidden; }
+
+.foto-portada {
+  width: 100%;
+  height: 175px;
+  background: #e4f0e5;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  font-size: 48px;
+}
+
+.tarjeta-contenido { padding: 15px; }
+
+.tarjeta h3 { margin-bottom: 7px; }
+
+.tarjeta p {
+  color: var(--gris);
+  font-size: 13px;
+  margin-bottom: 9px;
+  overflow-wrap: anywhere;
+}
+
+.etiqueta {
+  display: inline-block;
+  background: #e2f5e7;
+  color: #176b45;
+  border-radius: 20px;
+  padding: 5px 9px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.acciones {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.acciones button { flex: 1; }
+
+.formulario {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.campo label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.campo input, .campo select, .campo textarea,
+#busqueda {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ccdacf;
+  border-radius: 9px;
+  background: white;
+  color: var(--texto);
+}
+
+.campo textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.completo { grid-column: 1 / -1; }
+
+.vista-foto {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.vista-foto img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--borde);
+}
+
+.foto-item { position: relative; }
+
+.foto-item button {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  padding: 4px 8px;
+  background: white;
+}
+
+.oculto { display: none !important; }
+
+.vacio {
+  padding: 35px 10px;
+  text-align: center;
+  color: var(--gris);
+}
+
+.detalle-foto {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 10px 0;
+}
+
+.actividad {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--borde);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.actividad p {
+  color: var(--gris);
+  font-size: 13px;
+  margin: 5px 0 0;
+}
+
+.aviso {
+  background: #e7f5eb;
+  color: #176b45;
+  border-radius: 9px;
+  padding: 12px;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+@media(max-width:800px) {
+  .estadisticas { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media(max-width:520px) {
+  .contenedor { padding: 12px; }
+  header { padding: 16px; }
+  .cabecera { align-items: flex-start; }
+  .cabecera .btn { padding: 9px; }
+  .grid { grid-template-columns: 1fr; }
+  .formulario { grid-template-columns: 1fr; }
+  .completo { grid-column: auto; }
+  .panel { padding: 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="cabecera">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="logo">🌱</div>
+      <div>
+        <h1>Cultiva</h1>
+        <p>Tu campo, en tus manos</p>
+      </div>
+    </div>
+    <button class="btn-claro" onclick="nuevoCultivo()">
+      + Nueva siembra
+    </button>
+  </div>
+</header>
+
+<div class="contenedor">
+
+  <nav class="navegacion">
+    <button class="nav activo" data-vista="inicio"
+      onclick="navegar('inicio')">🏠 Inicio</button>
+    <button class="nav" data-vista="cultivos"
+      onclick="navegar('cultivos')">🌿 Mis cultivos</button>
+    <button class="nav" data-vista="actividades"
+      onclick="navegar('actividades')">📋 Actividades</button>
+    <button class="nav" data-vista="respaldo"
+      onclick="navegar('respaldo')">💾 Respaldos</button>
+  </nav>
+
+  <main id="app"></main>
+
+</div>
+
+<script>
+"use strict";
+
+const CLAVE = "cultiva_datos_v1";
+let cultivos = [];
+let actividades = [];
+let vista = "inicio";
+let editando = null;
+let fotosTemporales = [];
+let cultivoDetalle = null;
+
+function cargar() {
+  try {
+    cultivos = JSON.parse(localStorage.getItem(CLAVE) || "[]");
+    actividades = JSON.parse(
+      localStorage.getItem(CLAVE + "_actividades") || "[]"
+    );
+
+    if (!Array.isArray(cultivos)) cultivos = [];
+    if (!Array.isArray(actividades)) actividades = [];
+  } catch (e) {
+    cultivos = [];
+    actividades = [];
+    alert("No se pudieron leer los datos guardados.");
+  }
+}
+
+function guardar() {
+  try {
+    localStorage.setItem(CLAVE, JSON.stringify(cultivos));
+    localStorage.setItem(
+      CLAVE + "_actividades",
+      JSON.stringify(actividades)
+    );
+    return true;
+  } catch (e) {
+    alert("No hay espacio suficiente para guardar. Prueba con fotos más pequeñas.");
+    return false;
+  }
+}
+
+function escapar(valor) {
+  return String(valor ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[c]);
+}
+
+function fechaBonita(fecha) {
+  if (!fecha) return "Sin fecha";
+  const d = new Date(fecha + "T12:00:00");
+  return isNaN(d) ? fecha : d.toLocaleDateString("es-MX");
+}
+
+function hoy() {
+  const d = new Date();
+  return d.getFullYear() + "-" +
+    String(d.getMonth() + 1).padStart(2, "0") + "-" +
+    String(d.getDate()).padStart(2, "0");
+}
+
+function notificar(mensaje) {
+  alert(mensaje);
+}
+
+function navegar(destino) {
+  vista = destino;
+  cultivoDetalle = null;
+  document.querySelectorAll(".nav").forEach(b => {
+    b.classList.toggle("activo", b.dataset.vista === destino);
+  });
+  renderizar();
+}
+
+function renderizar() {
+  const app = document.getElementById("app");
+
+  if (vista === "inicio") app.innerHTML = pantallaInicio();
+  else if (vista === "cultivos") app.innerHTML = pantallaCultivos();
+  else if (vista === "formulario") app.innerHTML = pantallaFormulario();
+  else if (vista === "detalle") app.innerHTML = pantallaDetalle();
+  else if (vista === "actividades") app.innerHTML = pantallaActividades();
+  else if (vista === "respaldo") app.innerHTML = pantallaRespaldo();
+}
+
+function pantallaInicio() {
+  const plantas = cultivos.reduce((s, c) => s + Number(c.cantidad), 0);
+  const pendientes = actividades.filter(a => !a.completada).length;
+
+  return `
+    <h2>¡Bienvenido!</h2>
+    <p style="color:#6c7c71">Resumen de tu actividad agrícola.</p>
+
+    <section class="estadisticas">
+      <div class="stat"><span>Cultivos registrados</span>
+        <strong>${cultivos.length}</strong></div>
+      <div class="stat"><span>Plantas sembradas</span>
+        <strong>${plantas.toLocaleString("es-MX")}</strong></div>
+      <div class="stat"><span>Actividades pendientes</span>
+        <strong>${pendientes}</strong></div>
+      <div class="stat"><span>En seguimiento</span>
+        <strong>${cultivos.filter(c => !["Cosechado","Perdido"].includes(c.estado)).length}</strong></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-titulo">
+        <h2>Cultivos recientes</h2>
+        <button class="btn" onclick="nuevoCultivo()">+ Registrar</button>
+      </div>
+      ${cultivos.length
+        ? `<div class="grid">${cultivos.slice().reverse().slice(0,3).map(tarjetaCultivo).join("")}</div>`
+        : `<div class="vacio"><div style="font-size:45px">🌾</div>
+          <h3>Aún no tienes cultivos</h3>
+          <p>Registra tu primera siembra para comenzar.</p>
+          <button class="btn" onclick="nuevoCultivo()">Registrar primera siembra</button>
+          </div>`}
+    </section>
+
+    <div class="aviso">
+      ✓ Los registros se guardan en este navegador. Exporta respaldos
+      periódicamente para evitar perder tu información.
+    </div>`;
+}
+
+function tarjetaCultivo(c) {
+  const foto = c.fotos && c.fotos.length ? c.fotos[0] : "";
+
+  return `
+    <article class="tarjeta">
+      ${foto
+        ? `<img class="foto-portada" src="${foto}" alt="Foto del cultivo">`
+        : `<div class="foto-portada">🌱</div>`}
+      <div class="tarjeta-contenido">
+        <h3>${escapar(c.nombre)}</h3>
+        <span class="etiqueta">${escapar(c.estado)}</span>
+        <p>🌿 ${escapar(c.especie)}</p>
+        <p>📅 Siembra: ${fechaBonita(c.fecha)}</p>
+        <p>🔢 Cantidad: ${Number(c.cantidad).toLocaleString("es-MX")}</p>
+        <p>📍 ${escapar(c.ubicacion || "Sin ubicación")}</p>
+        <div class="acciones">
+          <button class="btn" onclick="verDetalle(${c.id})">Ver ficha</button>
+          <button class="btn-borde" onclick="editarCultivo(${c.id})">Editar</button>
+        </div>
+      </div>
+    </article>`;
+}
+
+function pantallaCultivos() {
+  return `
+    <section class="panel">
+      <div class="panel-titulo">
+        <div><h2>Mis cultivos</h2>
+        <p>Consulta, busca y administra tus siembras.</p></div>
+        <button class="btn" onclick="nuevoCultivo()">+ Nueva siembra</button>
+      </div>
+      <input id="busqueda" placeholder="Buscar por nombre o especie..."
+        oninput="filtrarCultivos()" style="margin:12px 0">
+      <div id="resultados" class="grid">
+        ${cultivos.length ? cultivos.map(tarjetaCultivo).join("") :
+          '<div class="vacio">No hay cultivos registrados.</div>'}
+      </div>
+    </section>`;
+}
+
+function filtrarCultivos() {
+  const texto = document.getElementById("busqueda").value.toLowerCase();
+  const filtrados = cultivos.filter(c =>
+    (c.nombre + " " + c.especie + " " + c.ubicacion)
+      .toLowerCase().includes(texto)
+  );
+
+  document.getElementById("resultados").innerHTML = filtrados.length
+    ? filtrados.map(tarjetaCultivo).join("")
+    : '<div class="vacio">No se encontraron resultados.</div>';
+}
+
+function nuevoCultivo() {
+  editando = null;
+  fotosTemporales = [];
+  vista = "formulario";
+  renderizar();
+}
+
+function editarCultivo(id) {
+  const c = cultivos.find(x => x.id === id);
+  if (!c) return;
+  editando = id;
+  fotosTemporales = [...(c.fotos || [])];
+  vista = "formulario";
+  renderizar();
+}
+
+function pantallaFormulario() {
+  const c = editando === null
+    ? {}
+    : cultivos.find(x => x.id === editando) || {};
+
+  return `
+    <section class="panel">
+      <h2>${editando === null ? "🌱 Registrar nueva siembra" : "Editar cultivo"}</h2>
+      <form onsubmit="guardarCultivo(event)">
+        <div class="formulario">
+          <div class="campo">
+            <label>Nombre del cultivo *</label>
+            <input name="nombre" required maxlength="70"
+              placeholder="Ej. Maíz del lote 1" value="${escapar(c.nombre || "")}">
+          </div>
+
+          <div class="campo">
+            <label>Especie *</label>
+            <select name="especie" required>
+              <option value="">Seleccionar</option>
+              ${["Maíz","Frijol","Limón","Aguacate","Tomate","Chile","Calabaza","Café","Mango","Otro"].map(s =>
+                `<option ${c.especie === s ? "selected" : ""}>${s}</option>`
+              ).join("")}
+            </select>
+          </div>
+
+          <div class="campo">
+            <label>Variedad</label>
+            <input name="variedad" value="${escapar(c.variedad || "")}"
+              placeholder="Ej. Criollo">
+          </div>
+
+          <div class="campo">
+            <label>Fecha de siembra *</label>
+            <input type="date" name="fecha" required
+              value="${escapar(c.fecha || hoy())}">
+          </div>
+
+          <div class="campo">
+            <label>Cantidad de plantas *</label>
+            <input type="number" name="cantidad" min="1" required
+              value="${c.cantidad ?? ""}" placeholder="Ej. 200">
+          </div>
+
+          <div class="campo">
+            <label>Ubicación / parcela</label>
+            <input name="ubicacion" value="${escapar(c.ubicacion || "")}"
+              placeholder="Ej. Lote 1">
+          </div>
+
+          <div class="campo">
+            <label>Estado</label>
+            <select name="estado">
+              ${["Sembrado","En crecimiento","En floración","Cosechado","Perdido"].map(s =>
+                `<option ${c.estado === s || (!c.estado && s === "Sembrado") ? "selected" : ""}>${s}</option>`
+              ).join("")}
+            </select>
+          </div>
+
+          <div class="campo">
+            <label>Fotografías</label>
+            <input id="fotos" type="file" accept="image/*"
+              capture="environment" multiple onchange="cargarFotos(event)">
+            <small>Selecciona imágenes o usa la cámara si el dispositivo lo permite.</small>
+          </div>
+
+          <div class="campo completo">
+            <label>Observaciones</label>
+            <textarea name="notas"
+              placeholder="Notas sobre el terreno, crecimiento, etc.">${escapar(c.notas || "")}</textarea>
+          </div>
+
+          <div class="completo">
+            <strong>Fotos seleccionadas</strong>
+            <div id="previsualizacion" class="vista-foto">
+              ${previsualizarFotos()}
+            </div>
+          </div>
+        </div>
+
+        <div class="acciones" style="justify-content:flex-end;margin-top:20px">
+          <button type="button" class="btn-borde" onclick="navegar('cultivos')">Cancelar</button>
+          <button type="submit" class="btn">Guardar cultivo</button>
+        </div>
+      </form>
+    </section>`;
+}
+
+function previsualizarFotos() {
+  return fotosTemporales.map((f, i) => `
+    <div class="foto-item">
+      <img src="${f}" alt="Foto seleccionada">
+      <button type="button" onclick="quitarFoto(${i})">×</button>
+    </div>`).join("");
+}
+
+async function cargarFotos(event) {
+  const archivos = [...event.target.files];
+
+  for (const archivo of archivos) {
+    if (!archivo.type.startsWith("image/")) continue;
+
+    // Redimensionar las imágenes para reducir el uso de almacenamiento.
+    try {
+      const foto = await redimensionar(archivo);
+      fotosTemporales.push(foto);
+    } catch (e) {
+      notificar("No se pudo leer una de las fotografías.");
+    }
+  }
+
+  const contenedor = document.getElementById("previsualizacion");
+  if (contenedor) contenedor.innerHTML = previsualizarFotos();
+  event.target.value = "";
+}
+
+function redimensionar(archivo) {
+  return new Promise((resolve, reject) => {
+    const lector = new FileReader();
+
+    lector.onerror = reject;
+    lector.onload = () => {
+      const imagen = new Image();
+
+      imagen.onerror = reject;
+      imagen.onload = () => {
+        const max = 1000;
+        const escala = Math.min(1, max / Math.max(imagen.width, imagen.height));
+        const canvas = document.createElement("canvas");
+
+        canvas.width = Math.max(1, Math.round(imagen.width * escala));
+        canvas.height = Math.max(1, Math.round(imagen.height * escala));
+
+        const contexto = canvas.getContext("2d");
+        contexto.drawImage(imagen, 0, 0, canvas.width, canvas.height);
+
+        resolve(canvas.toDataURL("image/jpeg", 0.75));
+      };
+
+      imagen.src = lector.result;
+    };
+
+    lector.readAsDataURL(archivo);
+  });
+}
+
+function quitarFoto(indice) {
+  fotosTemporales.splice(indice, 1);
+  const contenedor = document.getElementById("previsualizacion");
+  if (contenedor) contenedor.innerHTML = previsualizarFotos();
+}
+
+function guardarCultivo(event) {
+  event.preventDefault();
+
+  const form = event.target;
+  const datos = new FormData(form);
+
+  const cultivo = {
+    id: editando === null ? Date.now() : editando,
+    nombre: datos.get("nombre").trim(),
+    especie: datos.get("especie"),
+    variedad: datos.get("variedad").trim(),
+    fecha: datos.get("fecha"),
+    cantidad: Number(datos.get("cantidad")),
+    ubicacion: datos.get("ubicacion").trim(),
+    estado: datos.get("estado"),
+    notas: datos.get("notas").trim(),
+    fotos: [...fotosTemporales]
+  };
+
+  const anterior = cultivos;
+  if (editando === null) {
+    cultivos.push(cultivo);
+  } else {
+    cultivos = cultivos.map(c => c.id === editando ? cultivo : c);
+  }
+
+  if (!guardar()) {
+    cultivos = anterior;
+    return;
+  }
+
+  editando = null;
+  fotosTemporales = [];
+  vista = "cultivos";
+  renderizar();
+  notificar("Cultivo guardado correctamente.");
+}
+
+function verDetalle(id) {
+  cultivoDetalle = cultivos.find(c => c.id === id);
+  if (!cultivoDetalle) return;
+  vista = "detalle";
+  renderizar();
+}
+
+function pantallaDetalle() {
+  const c = cultivoDetalle;
+  if (!c) return "<section class='panel'>Cultivo no encontrado.</section>";
+
+  const acts = actividades.filter(a => a.cultivoId === c.id);
+
+  return `
+    <section class="panel">
+      <div class="panel-titulo">
+        <h2>${escapar(c.nombre)}</h2>
+        <button class="btn-borde" onclick="navegar('cultivos')">← Volver</button>
+      </div>
+
+      ${c.fotos && c.fotos.length
+        ? `<img class="detalle-foto" src="${c.fotos[0]}" alt="Cultivo">`
+        : '<div class="foto-portada">🌱</div>'}
+
+      <span class="etiqueta">${escapar(c.estado)}</span>
+      <p><strong>Especie:</strong> ${escapar(c.especie)}</p>
+      <p><strong>Variedad:</strong> ${escapar(c.variedad || "No indicada")}</p>
+      <p><strong>Fecha de siembra:</strong> ${fechaBonita(c.fecha)}</p>
+      <p><strong>Cantidad:</strong> ${Number(c.cantidad).toLocaleString("es-MX")} plantas</p>
+      <p><strong>Ubicación:</strong> ${escapar(c.ubicacion || "No indicada")}</p>
+      <p><strong>Observaciones:</strong> ${escapar(c.notas || "Sin observaciones")}</p>
+
+      <h3>Historial fotográfico (${(c.fotos || []).length})</h3>
+      <div class="vista-foto">
+        ${(c.fotos || []).map(f => `<img src="${f}" alt="Foto histórica">`).join("")}
+      </div>
+
+      <h3 style="margin-top:25px">Actividades de este cultivo</h3>
+      ${acts.length ? acts.map(a => `
+        <div class="actividad">
+          <div><strong>${escapar(a.tipo)}</strong>
+          <p>${fechaBonita(a.fecha)} · ${escapar(a.notas || "")}</p></div>
+          <span class="etiqueta">${a.completada ? "Completada" : "Pendiente"}</span>
+        </div>`).join("") : "<p>No hay actividades registradas.</p>"}
+
+      <div class="acciones" style="margin-top:20px">
+        <button class="btn" onclick="editarCultivo(${c.id})">Editar cultivo</button>
+        <button class="btn" onclick="nuevaActividad(${c.id})">+ Actividad</button>
+        <button class="btn-rojo" onclick="eliminarCultivo(${c.id})">Eliminar</button>
+      </div>
+    </section>`;
+}
+
+function eliminarCultivo(id) {
+  if (!confirm("¿Seguro que deseas eliminar este cultivo?")) return;
+
+  const anterior = cultivos;
+  cultivos = cultivos.filter(c => c.id !== id);
+  const actsAnteriores = actividades;
+  actividades = actividades.filter(a => a.cultivoId !== id);
+
+  if (!guardar()) {
+    cultivos = anterior;
+    actividades = actsAnteriores;
+    return;
+  }
+
+  vista = "cultivos";
+  renderizar();
+  notificar("Cultivo eliminado.");
+}
+
+function nuevaActividad(cultivoId = null) {
+  if (!cultivos.length) {
+    notificar("Primero registra un cultivo.");
+    nuevoCultivo();
+    return;
+  }
+
+  const opciones = cultivos.map(c =>
+    `<option value="${c.id}" ${c.id === cultivoId ? "selected" : ""}>${escapar(c.nombre)}</option>`
+  ).join("");
+
+  document.getElementById("app").innerHTML = `
+    <section class="panel">
+      <h2>Registrar actividad</h2>
+      <form onsubmit="guardarActividad(event)">
+        <div class="formulario">
+          <div class="campo completo">
+            <label>Cultivo *</label>
+            <select name="cultivoId" required>${opciones}</select>
+          </div>
+          <div class="campo">
+            <label>Tipo de actividad</label>
+            <select name="tipo">
+              <option>Riego</option>
+              <option>Fertilización</option>
+              <option>Poda</option>
+              <option>Control de plagas</option>
+              <option>Cosecha</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label>Fecha *</label>
+            <input name="fecha" type="date" value="${hoy()}" required>
+          </div>
+          <div class="campo completo">
+            <label>Observaciones</label>
+            <textarea name="notas"></textarea>
+          </div>
+        </div>
+        <div class="acciones">
+          <button type="button" class="btn-borde" onclick="navegar('actividades')">Cancelar</button>
+          <button class="btn">Guardar actividad</button>
+        </div>
+      </form>
+    </section>`;
+}
+
+function guardarActividad(event) {
+  event.preventDefault();
+
+  const datos = new FormData(event.target);
+  const actividad = {
+    id: Date.now(),
+    cultivoId: Number(datos.get("cultivoId")),
+    tipo: datos.get("tipo"),
+    fecha: datos.get("fecha"),
+    notas: datos.get("notas").trim(),
+    completada: false
+  };
+
+  actividades.push(actividad);
+
+  if (!guardar()) {
+    actividades.pop();
+    return;
+  }
+
+  vista = "actividades";
+  renderizar();
+  notificar("Actividad registrada.");
+}
+
+function pantallaActividades() {
+  return `
+    <section class="panel">
+      <div class="panel-titulo">
+        <h2>📋 Actividades</h2>
+        <button class="btn" onclick="nuevaActividad()">+ Nueva actividad</button>
+      </div>
+      ${actividades.length
+        ? actividades.slice().reverse().map(a => {
+          const c = cultivos.find(x => x.id === a.cultivoId);
+          return `<div class="actividad">
+            <div><strong>${escapar(a.tipo)} — ${escapar(c ? c.nombre : "Cultivo eliminado")}</strong>
+            <p>${fechaBonita(a.fecha)} · ${escapar(a.notas || "Sin observaciones")}</p>
+            <span class="etiqueta">${a.completada ? "Completada" : "Pendiente"}</span></div>
+            <div class="acciones">
+              ${!a.completada ? `<button class="btn" onclick="completarActividad(${a.id})">Completar</button>` : ""}
+              <button class="btn-rojo" onclick="eliminarActividad(${a.id})">Eliminar</button>
+            </div>
+          </div>`;
+        }).join("")
+        : '<div class="vacio">Aún no hay actividades. Registra un riego o cuidado.</div>'}
+    </section>`;
+}
+
+function completarActividad(id) {
+  const a = actividades.find(x => x.id === id);
+  if (!a) return;
+
+  a.completada = true;
+  if (guardar()) {
+    renderizar();
+    notificar("Actividad completada.");
+  }
+}
+
+function eliminarActividad(id) {
+  if (!confirm("¿Eliminar esta actividad?")) return;
+  const anterior = actividades;
+  actividades = actividades.filter(a => a.id !== id);
+
+  if (!guardar()) {
+    actividades = anterior;
+    return;
+  }
+
+  renderizar();
+}
+
+function pantallaRespaldo() {
+  return `
+    <section class="panel">
+      <h2>💾 Respaldo de datos</h2>
+      <p>Exporta tus cultivos, fotografías y actividades a un archivo JSON.</p>
+      <button class="btn" onclick="exportarRespaldo()">Descargar respaldo</button>
+      <hr style="border:0;border-top:1px solid #dce7dd;margin:25px 0">
+      <h3>Restaurar información</h3>
+      <p>Importa un respaldo previamente generado por esta aplicación.</p>
+      <input id="archivoRespaldo" type="file" accept=".json,application/json">
+      <button class="btn" onclick="importarRespaldo()">Restaurar respaldo</button>
+      <p style="color:#6c7c71;font-size:13px;margin-top:20px">
+        Importante: la información se guarda en el navegador de este dispositivo.
+        Borrar sus datos puede eliminar los registros. Conserva una copia externa.
+      </p>
+    </section>`;
+}
+
+function exportarRespaldo() {
+  const datos = {
+    aplicacion: "Cultiva",
+    version: 1,
+    cultivos,
+    actividades
+  };
+
+  const blob = new Blob(
+    [JSON.stringify(datos)],
+    { type: "application/json" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "respaldo-cultiva-" + hoy() + ".json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function importarRespaldo() {
+  const archivo = document.getElementById("archivoRespaldo").files[0];
+  if (!archivo) {
+    notificar("Selecciona un archivo de respaldo.");
+    return;
+  }
+
+  try {
+    const datos = JSON.parse(await archivo.text());
+
+    if (datos.aplicacion !== "Cultiva" ||
+        !Array.isArray(datos.cultivos) ||
+        !Array.isArray(datos.actividades)) {
+      throw new Error("Archivo no válido");
+    }
+
+    if (!confirm("La restauración reemplazará los datos actuales. ¿Continuar?")) return;
+
+    const cultivosAnteriores = cultivos;
+    const actividadesAnteriores = actividades;
+
+    cultivos = datos.cultivos;
+    actividades = datos.actividades;
+
+    if (!guardar()) {
+      cultivos = cultivosAnteriores;
+      actividades = actividadesAnteriores;
+      return;
+    }
+
+    vista = "inicio";
+    renderizar();
+    notificar("Respaldo restaurado correctamente.");
+  } catch (e) {
+    notificar("No se pudo leer el respaldo. Verifica el archivo.");
+  }
+}
+
+cargar();
+renderizar();
+</script>
+
+</body>
+</html>
